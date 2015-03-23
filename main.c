@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int isEndOfLine(char c) {
     if (c == '\n') {
@@ -25,6 +26,23 @@ int isInResizeLines(int counterLines, int allLinesSize) {
 int main(int argc, char** argv) {
     if (argc != 2) {
         return (EXIT_FAILURE);
+    }
+    if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0)) {
+	printf("%s", "Usage:\n");
+	printf("%s", "	tp0 -h\n");
+	printf("%s", "	tp0 -V\n");
+	printf("%s", "	tp0 [file...]\n");
+	printf("%s", "Options:\n");
+	printf("%s", "	-V, --version Print version and quit.\n");
+	printf("%s", "	-h, --help Print this information and quit.\n");
+	printf("%s", "Examples:\n");
+	printf("%s", "	tp0 foo.txt bar.txt\n");
+	printf("%s", "	tp0 gz.txt\n");
+	return (EXIT_SUCCESS);
+    }
+    if ((strcmp(argv[1], "-V") == 0) || (strcmp(argv[1], "--version") == 0)) {
+	printf("%s", "Falta agregar información sobre la versión.\n");
+	return (EXIT_SUCCESS);
     }
     FILE *fp;
     fp = fopen(argv[1], "r");
