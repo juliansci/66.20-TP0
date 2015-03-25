@@ -12,10 +12,10 @@ int isEndOfLine(char c) {
 void concatBuffer(char** line, const char* buffer) {
     size_t len1 = *line ? strlen(*line) : 0;
     size_t len2 = buffer ? strlen(buffer) : 0;
-    char *res = realloc(*line, len1 + len2 + 1);
-    if (res) {
-        memcpy(res + len1, buffer, len2 + 1);
-        *line = res;
+    char* concat = realloc(*line, len1 + len2 + 1);
+    if (concat) {
+        memcpy(concat + len1, buffer, len2 + 1);
+        *line = concat;
     }
 }
 
@@ -34,7 +34,7 @@ int tacFile(char* fileName, char* outputFileName) {
         exit(1);
     }
 
-    char ** info = NULL;
+    char ** arrayLines = NULL;
     int lineLenght;
     int lineCounter = 0;
     const int bufIncrSize = 11;
@@ -44,10 +44,10 @@ int tacFile(char* fileName, char* outputFileName) {
         concatBuffer(&line, buffer);
         char lastCharacterBuffer = buffer[strlen(buffer) - 1];
         if (isEndOfLine(lastCharacterBuffer)) {
-            info = realloc(info, (lineCounter + 1) * sizeof (char *));
+            arrayLines = realloc(arrayLines, (lineCounter + 1) * sizeof (char *));
             lineLenght = strlen(line);
-            info[lineCounter] = calloc(sizeof (char), lineLenght + 1);
-            strcpy(info[lineCounter], line);
+            arrayLines[lineCounter] = calloc(sizeof (char), lineLenght + 1);
+            strcpy(arrayLines[lineCounter], line);
             lineCounter++;
             line = (char *) calloc(bufIncrSize, sizeof (char));
         }
@@ -55,7 +55,7 @@ int tacFile(char* fileName, char* outputFileName) {
 
     int i;
     for (i = lineCounter - 1; i >= 0; i--) {
-        fprintf(resultFile, "%s", info[i]);
+        fprintf(resultFile, "%s", arrayLines[i]);
     }
 
     fclose(fp);
