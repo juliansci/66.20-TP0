@@ -2,7 +2,7 @@
 
 testFile() {
 echo -e "\nTEST "$1".txt"
-./tac test-files/$1.txt | ./tac > output/$1.txt
+./tp0 test-files/$1.txt | ./tp0 > output/$1.txt
 res1=($(md5sum test-files/$1.txt))
 res2=($(md5sum output/$1.txt))
 if [ $res1 == $res2 ]; 
@@ -14,7 +14,7 @@ fi
 }
 
 echo Compilando...
-gcc -o tac main.c
+gcc -o tp0 main.c
 
 testFile empty
 testFile basic

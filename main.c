@@ -2,6 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 
+void printHelpInfo() {
+	printf("%s", "Usage:\n");
+	printf("%s", "	tp0 -h\n");
+	printf("%s", "	tp0 -V\n");
+	printf("%s", "	tp0 [file...]\n");
+	printf("%s", "Options:\n");
+	printf("%s", "	-V, --version Print version and quit.\n");
+	printf("%s", "	-h, --help Print this information and quit.\n");
+	printf("%s", "Examples:\n");
+	printf("%s", "	tp0 foo.txt bar.txt\n");
+	printf("%s", "	tp0 gz.txt\n");
+}
+
+void printVersionInfo() {
+	printf("%s", "Falta agregar información sobre la versión.\n");
+}
+
 int isEndOfLine(char c) {
 	if (c == '\n') {
 		return 1;
@@ -53,26 +70,17 @@ int main(int argc, char** argv) {
 
 	int hasInputFile;
 
-	if (argc > 1) {
-		if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0)) {
-			printf("%s", "Usage:\n");
-			printf("%s", "	tp0 -h\n");
-			printf("%s", "	tp0 -V\n");
-			printf("%s", "	tp0 [file...]\n");
-			printf("%s", "Options:\n");
-			printf("%s", "	-V, --version Print version and quit.\n");
-			printf("%s", "	-h, --help Print this information and quit.\n");
-			printf("%s", "Examples:\n");
-			printf("%s", "	tp0 foo.txt bar.txt\n");
-			printf("%s", "	tp0 gz.txt\n");
-			return (EXIT_SUCCESS);
-		}
-		if ((strcmp(argv[1], "-V") == 0)
-				|| (strcmp(argv[1], "--version") == 0)) {
-			printf("%s", "Falta agregar información sobre la versión.\n");
-			return (EXIT_SUCCESS);
-		}
+	if ((argc == 2) && ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))) {
+		printHelpInfo();
+		return (EXIT_SUCCESS);
+	}
 
+	if ((argc == 2) && ((strcmp(argv[1], "-V") == 0) || (strcmp(argv[1], "--version") == 0))) {
+		printVersionInfo();
+		return (EXIT_SUCCESS);
+	}
+
+	if (argc > 1) {
 		fp = fopen(argv[1], "r");
 		if (fp == NULL) {
 			return (EXIT_FAILURE);
