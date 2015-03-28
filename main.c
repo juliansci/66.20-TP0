@@ -19,16 +19,7 @@ void concatBuffer(char** line, const char* buffer) {
 	}
 }
 
-int tacFile(FILE* fp, char* outputFileName) {
-
-	FILE *resultFile;
-	resultFile = fopen(outputFileName, "w");
-
-	if (resultFile == NULL) {
-		printf("Error opening file: %s!\n", outputFileName);
-		exit(1);
-	}
-
+int tacFile(FILE* fp) {
 	char ** arrayLines = NULL;
 	int lineLenght;
 	int lineCounter = 0;
@@ -51,23 +42,14 @@ int tacFile(FILE* fp, char* outputFileName) {
 
 	int i;
 	for (i = lineCounter - 1; i >= 0; i--) {
-		fprintf(resultFile, "%s", arrayLines[i]);
+		printf("%s", arrayLines[i]);
 	}
-
-	fclose(resultFile);
 
 	return (EXIT_SUCCESS);
 }
 
 int main(int argc, char** argv) {
 	FILE *fp;
-
-	char* outputFileName;
-	if (argc >= 3) {
-		outputFileName = argv[2];
-	} else {
-		outputFileName = "output/resultFile.txt";
-	}
 
 	int hasInputFile;
 
@@ -101,12 +83,12 @@ int main(int argc, char** argv) {
 		fp = stdin;
 		hasInputFile = 0;
 	}
-	int result = tacFile(fp, outputFileName);
+
+	int result = tacFile(fp);
 	if (hasInputFile == 1) {
 		fclose(fp);
 	}
 	return (result);
 }
 
-//prueba commit
 
