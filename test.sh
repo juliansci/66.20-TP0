@@ -16,8 +16,8 @@ fi
 echo Compilando...
 gcc -o tp0 main.c
 
-testFile empty
-testFile basic
-testFile empty-lines
-testFile large-file
+FILES=(empty basic empty-lines large-file return status)
 
+for i in ${FILES[@]}; do
+	testFile ${i}
+done

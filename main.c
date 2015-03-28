@@ -66,7 +66,6 @@ int tacFile(FILE* fp) {
 }
 
 int main(int argc, char** argv) {
-	FILE *fp;
 
 	int hasInputFile;
 
@@ -80,23 +79,24 @@ int main(int argc, char** argv) {
 		return (EXIT_SUCCESS);
 	}
 
-	if (argc > 1) {
-		fp = fopen(argv[1], "r");
+	int result;
+
+	if (argc < 2) { //no tengo archivo de entrada, uso standard input
+		result = tacFile(stdin);
+		return (result);
+	}
+
+	int i;
+	for (i = 1; i < argc; i++){
+		FILE *fp;
+		fp = fopen(argv[i], "r");
 		if (fp == NULL) {
 			return (EXIT_FAILURE);
 		}
-		hasInputFile = 1;
-
-	} else {
-		fp = stdin;
-		hasInputFile = 0;
-	}
-
-	int result = tacFile(fp);
-	if (hasInputFile == 1) {
+		int result = tacFile(fp);
 		fclose(fp);
 	}
-	return (result);
+	return (EXIT_SUCCESS);
 }
 
 
