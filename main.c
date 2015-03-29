@@ -94,6 +94,7 @@ int main(int argc, char** argv) {
 		FILE *fp;
 		fp = fopen(argv[i], "r");
 		if (fp == NULL) {
+			fprintf (stderr, "Nombre de archivo inválido.\n");
 			return (EXIT_FAILURE);
 		}
 		int result = tacFile(fp);
