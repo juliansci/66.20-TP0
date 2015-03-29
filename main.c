@@ -16,7 +16,12 @@ void printHelpInfo() {
 }
 
 void printVersionInfo() {
-	printf("%s", "Falta agregar información sobre la versión.\n");
+	printf("%s", "tp0 1.1\n");
+	printf("%s", "Copyright © 2015 FIUBA.\n");
+	printf("%s", "Esto es software libre: usted es libre de cambiarlo y redistribuirlo.\n");
+	printf("%s", "No hay NINGUNA GARANTÍA, hasta donde permite la ley.\n");
+	printf("%s", "\n");
+	printf("%s", "Escrito por Julian Scialabba, Kaoru Heanna y Paula Saffioti.\n");
 }
 
 int isEndOfLine(char c) {
@@ -67,8 +72,6 @@ int tacFile(FILE* fp) {
 
 int main(int argc, char** argv) {
 
-	int hasInputFile;
-
 	if ((argc == 2) && ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))) {
 		printHelpInfo();
 		return (EXIT_SUCCESS);
@@ -98,5 +101,3 @@ int main(int argc, char** argv) {
 	}
 	return (EXIT_SUCCESS);
 }
-
-
