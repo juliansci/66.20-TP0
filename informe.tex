@@ -52,11 +52,31 @@ Infraestructura b\'asica \\
 \end{center}
 \end{titlepage}
 
-\maketitle
-
 \section{Documentaci\'on}
+El objetivo del trabajo pr\'actico es desarrollar una version del comando tac de UNIX en lenguaje C. La funcionalidad b\'asica del mismo se basa en escribir por stdout el contenido de uno o m\'as archivos invirtiendo el orden de sus lineas.
 
-Documentaci´on relevante al dise˜no e implementaci´on del programa
+En la etapa de diseno analizamos de que manera ibamos a realizar el programa. Identificamos que deb\'iamos trabajar con archivos y memoria din\'amica y que la biblioteca standard de C nos prove\'ia la funcionalidad necesaria para estos requerimientos. Luego, pensamos con un mayor nivel de detalle el algoritmo base del programa que se resume en la siguiente lista de pasos:
+\begin{enumerate}
+	\item Abrir un archivo pasado por parametro.
+	\item Leer el archivo linea por linea hasta el final del archivo y guardarlo en un array. El tama\~no de las lineas debe ser din\'amico.
+	\item Recorrer el array en sentido inverso imprimiendo por stdout el contenido de cada linea.
+\end{enumerate}
+
+El paso 1 consiste en abrir los archivos pasados por parametro. Esto lo resolvimos f\'acilmente con la funci\'on fopen. Como resultado de este paso, nos qued\'o un puntero al archivo para operar con \'el. En caso de alg\'un error, lo lanzamos por stderror.
+
+El paso 2, sin dudas, es el m\'as complejo del trabajo pr\'actico. La complejidad reside en la lectura del archivo pidiendo memoria de manera din\'amica. 
+Identificamos que para leer linea por linea el archivo podiamos hacerlo mediante la lectura de caracter por caracter hasta un fin de linea o la lectura de un bloque de caracteres hasta llegar al fin de linea (fget vs fgets). Hemos optado por la segunda opci\'on por temas de rendimiento y practicidad.
+Luego de elegir leer el archivo mediante fgets, observamos que dicha funci\'on le\'ia una cantidad fija de caracteres por linea y que los archivos con los que ibamos a trabajar esta cantidad iba a ser din\'amica. Claramente ibamos a tener que utilizar los los metodos de manejo de memoria de c: malloc, calloc, realloc y free.
+
+En detalle de implementaci\'on, esto lo resolvimos de la siguiente manera:
+\begin{enumerate}
+	\item Por cada nueva linea, inicializamos un array de caracteres que representa la linea leer. La asignaci\'on de memoria din\'amica a este array de caracteres lo hicimos mediante la funciona calloc que adem\'as de reservar la memoria estipulada la inicializa en 0.
+	\item Leemos bloques de caracteres mediante fgets en un buffer y lo copiamos en el array de caracteres que representa la linea actual mencionado en el paso 1. En esta copia, tuvimos que redimensionar el array de caracteres mediante un realloc.
+	\item Si el ultimo caracter del buffer era un fin de linea, se procedia a guardar la linea actual resultante en el array de lineas y se inicializaba un nuevo array de caracteres como en el paso 1.
+\end{enumerate}
+
+
+El paso 3. fue el m\'as simple, ya que con un solo recorrido del array formado anteriormente lo cumplimos sin problemas.
 
 \section{Comandos}
 Comando(s) para compilar el programa
@@ -72,4 +92,6 @@ El c´odigo MIPS32 generado por el compilador;
 
 \section{Enunciado}
 
+
+\maketitle
 \end{document}
