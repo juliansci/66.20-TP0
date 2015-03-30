@@ -5,6 +5,8 @@
 
 \usepackage[spanish]{babel} % espanol
 \usepackage{graphicx} % graficos
+\usepackage{listings} % para el codigo
+\usepackage{vmargin} % margenes 
 
 \begin{document}
 
@@ -53,45 +55,199 @@ Infraestructura b\'asica \\
 \end{titlepage}
 
 \section{Documentaci\'on}
-El objetivo del trabajo pr\'actico es desarrollar una version del comando tac de UNIX en lenguaje C. La funcionalidad b\'asica del mismo se basa en escribir por stdout el contenido de uno o m\'as archivos invirtiendo el orden de sus lineas.
+El objetivo del trabajo pr\'actico es desarrollar una versi\'on del comando tac de UNIX en lenguaje C. La funcionalidad b\'asica del mismo se basa en escribir por stdout el contenido de uno o m\'as archivos invirtiendo el orden de sus l\'ineas.
 
-En la etapa de dise\~o analizamos de que manera ibamos a realizar el programa. Identificamos que deb\'iamos trabajar con archivos y memoria din\'amica y que la biblioteca standard de C nos prove\'ia la funcionalidad necesaria para estos requerimientos. Luego, pensamos con un mayor nivel de detalle el algoritmo base del programa que se resume en la siguiente lista de pasos:
+En la etapa de dise\~no analizamos de qu\'e manera ibamos a realizar el programa. Identificamos que deb\'iamos trabajar con archivos y memoria din\'amica y que la biblioteca standard de C nos prove\'ia la funcionalidad necesaria para estos requerimientos. Luego, pensamos con un mayor nivel de detalle el algoritmo base del programa que se resume en la siguiente lista de pasos:
 \begin{enumerate}
-	\item Abrir un archivo pasado por parametro.
-	\item Leer el archivo linea por linea hasta el final del archivo y guardarlo en un array. El tama\~no de las lineas debe ser din\'amico.
-	\item Recorrer el array en sentido inverso imprimiendo por stdout el contenido de cada linea.
+	\item Abrir un archivo pasado por par\'ametro.
+	\item Leer el archivo l\'inea por l\'inea hasta el final del archivo y guardarlo en un array. El tama\~no de las l\'ineas debe ser din\'amico.
+	\item Recorrer el array en sentido inverso imprimiendo por stdout el contenido de cada l\'inea.
 \end{enumerate}
 
-El paso 1 consiste en abrir los archivos pasados por parametro. Esto lo resolvimos f\'acilmente con la funci\'on fopen. Como resultado de este paso, nos qued\'o un puntero al archivo para operar con \'el. En caso de alg\'un error, lo lanzamos por stderror.
+El paso 1 consiste en abrir los archivos pasados por par\'ametro. Esto lo resolvimos f\'acilmente con la funci\'on fopen. Como resultado de este paso, nos qued\'o un puntero al archivo para operar con \'el. En caso de alg\'un error, lo lanzamos por stderr.
 
 El paso 2, sin dudas, es el m\'as complejo del trabajo pr\'actico. La complejidad reside en la lectura del archivo pidiendo memoria de manera din\'amica. 
-Identificamos que para leer linea por linea el archivo podiamos hacerlo mediante la lectura de caracter por caracter hasta un fin de linea o la lectura de un bloque de caracteres hasta llegar al fin de linea (fget vs fgets). Hemos optado por la segunda opci\'on por temas de rendimiento y practicidad.
-Luego de elegir leer el archivo mediante fgets, observamos que dicha funci\'on le\'ia una cantidad fija de caracteres por linea y que los archivos con los que ibamos a trabajar esta cantidad iba a ser din\'amica. Claramente ibamos a tener que utilizar los m\'etodos de manejo de memoria de c: malloc, calloc, realloc y free.
+Identificamos que para leer l\'inea por l\'inea el archivo podiamos hacerlo mediante la lectura de caracter por caracter hasta un fin de l\'inea o la lectura de un bloque de caracteres hasta llegar al fin de l\'inea (fget vs fgets). Hemos optado por la segunda opci\'on por temas de rendimiento y practicidad.
+Luego de elegir leer el archivo mediante fgets, observamos que dicha funci\'on le\'ia una cantidad fija de caracteres por l\'inea y que los archivos con los que \'ibamos a trabajar esta cantidad iba a ser din\'amica. Claramente \'ibamos a tener que utilizar los m\'etodos de manejo de memoria de c: malloc, calloc, realloc y free.
 
 En detalle de implementaci\'on, esto lo resolvimos de la siguiente manera:
 \begin{enumerate}
-	\item Por cada nueva linea, inicializamos un array de caracteres que representaba la linea leer. La asignaci\'on de memoria din\'amica a este array de caracteres lo hicimos mediante la funciona calloc que adem\'as de reservar la memoria estipulada la inicializa en 0.
-	\item Leemos bloques de caracteres mediante fgets en un buffer y lo copiamos en el array de caracteres que representa la linea actual mencionada en el paso 1. En esta copia, tuvimos que redimensionar el array de caracteres mediante un realloc.
-	\item Si el ultimo caracter del buffer era un fin de linea, se procedia a guardar la linea actual resultante en el array de lineas y se inicializaba un nuevo array de caracteres como en el paso 1.
+	\item Por cada nueva l\'inea, inicializamos un array de caracteres que representaba la l\'inea leer. La asignaci\'on de memoria din\'amica a este array de caracteres lo hicimos mediante la funciona calloc que adem\'as de reservar la memoria estipulada la inicializa en 0.
+	\item Leemos bloques de caracteres mediante fgets en un buffer y lo copiamos en el array de caracteres que representa la l\'inea actual mencionada en el paso 1. En esta copia, tuvimos que redimensionar el array de caracteres mediante un realloc.
+	\item Si el \'ultimo caracter del buffer era un fin de l\'inea, se proced\'ia a guardar la l\'inea actual resultante en el array de l\'ineas y se inicializaba un nuevo array de caracteres como en el paso 1.
 \end{enumerate}
 
 
 El paso 3. fue el m\'as simple, ya que con un solo recorrido del array formado anteriormente lo cumplimos sin problemas.
 
 \section{Comandos}
-Comando(s) para compilar el programa
+Para compilar el programa es necesario escribir el siguiente comando en el directorio donde se encuentre main.c:
+
+\lstset{language=bash, breaklines=true, basicstyle=\normalsize}
+\begin{lstlisting}
+$ gcc -o tp0 main.c
+\end{lstlisting}
 
 \section{Corridas de prueba}
-Las corridas de prueba, con los comentarios pertinentes;
+Para corroborar el funcionamiento del programa cont\'abamos con una serie de archivos de prueba y con el diccionario de palabras ubicado en /usr/share/dict/words. Para poder hacer todas las pruebas de manera r\'apida escribimos un script que compilaba el programa, luego lo ejecutaba para los archivos mencionados d\'andolos vuelta dos veces y finalmente verificaba que el archivo resultante fuera igual al original con md5sum. El script es el que sigue a continuaci\'on:
+\lstset{language=bash, breaklines=true, basicstyle=\normalsize}
+\begin{lstlisting}
+#!/bin/bash
+
+testFile() {
+	echo -e "\nTEST "$1".txt"
+	./tp0 test-files/$1.txt | ./tp0 > output/$1.txt
+	res1=($(md5sum test-files/$1.txt))
+	res2=($(md5sum output/$1.txt))
+	
+	echo "md5 de $1: $res2"
+	if [ $res1 == $res2 ]; 
+	then
+		echo -e "OK\n"
+	else
+		echo -e "ERROR\n"
+	fi
+}
+
+testWords() {
+	echo -e "\nTEST WORDS"
+	res1=($(cat '/usr/share/dict/words' | md5sum))
+	res2=($(./tp0 '/usr/share/dict/words' | ./tp0 | md5sum))
+	
+	echo "md5 de words: $res2"
+	if [ $res1 == $res2 ]; 
+	then
+		echo -e "OK\n"
+	else
+		echo -e "ERROR\n"
+	fi
+}
+
+echo Compilando...
+gcc -o tp0 main.c
+
+FILES=(empty basic empty-lines large-file return status)
+
+for i in ${FILES[@]}; do
+	testFile ${i}
+done
+
+testWords
+\end{lstlisting}
 
 \section{C\'odigo fuente}
-El c´odigo fuente, en lenguaje C;
+
+\lstset{language=C, breaklines=true, basicstyle=\normalsize}
+\begin{lstlisting}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void printHelpInfo() {
+	printf("%s", "Usage:\n");
+	printf("%s", "	tp0 -h\n");
+	printf("%s", "	tp0 -V\n");
+	printf("%s", "	tp0 [file...]\n");
+	printf("%s", "Options:\n");
+	printf("%s", "	-V, --version Print version and quit.\n");
+	printf("%s", "	-h, --help Print this information and quit.\n");
+	printf("%s", "Examples:\n");
+	printf("%s", "	tp0 foo.txt bar.txt\n");
+	printf("%s", "	tp0 gz.txt\n");
+}
+
+void printVersionInfo() {
+	printf("%s", "tp0 1.1\n");
+	printf("%s", "Copyright © 2015 FIUBA.\n");
+	printf("%s", "Esto es software libre: usted es libre de cambiarlo y redistribuirlo.\n");
+	printf("%s", "No hay NINGUNA GARANTÍA, hasta donde permite la ley.\n");
+	printf("%s", "\n");
+	printf("%s", "Escrito por Julian Scialabba, Kaoru Heanna y Paula Saffioti.\n");
+}
+
+int isEndOfLine(char c) {
+	if (c == '\n') {
+		return 1;
+	}
+	return 0;
+}
+
+void concatBuffer(char** line, const char* buffer) {
+	size_t len1 = *line ? strlen(*line) : 0;
+	size_t len2 = buffer ? strlen(buffer) : 0;
+	char* concat = realloc(*line, len1 + len2 + 1);
+	if (concat) {
+		memcpy(concat + len1, buffer, len2 + 1);
+		*line = concat;
+	}
+}
+
+int tacFile(FILE* fp) {
+	const int bufIncrSize = 10;
+	char ** arrayLines = NULL;
+	int lineCounter = 0;
+	char buffer[bufIncrSize];
+	char* line = (char *) calloc(bufIncrSize, sizeof(char));
+	while (fgets(buffer, bufIncrSize, fp)) {
+		concatBuffer(&line, buffer);
+		char lastCharacterBuffer = buffer[strlen(buffer) - 1];
+		if (isEndOfLine(lastCharacterBuffer)) {
+			arrayLines = realloc(arrayLines,
+					(lineCounter + 1) * sizeof(char *));
+			arrayLines[lineCounter] =  line;
+			lineCounter++;
+			line = (char *) calloc(bufIncrSize, sizeof(char));
+		}
+	}
+
+	int i;
+	for (i = lineCounter - 1; i >= 0; i--) {
+		printf("%s", arrayLines[i]);
+	}
+
+	return (EXIT_SUCCESS);
+}
+
+int main(int argc, char** argv) {
+
+	if ((argc == 2) && ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))) {
+		printHelpInfo();
+		return (EXIT_SUCCESS);
+	}
+
+	if ((argc == 2) && ((strcmp(argv[1], "-V") == 0) || (strcmp(argv[1], "--version") == 0))) {
+		printVersionInfo();
+		return (EXIT_SUCCESS);
+	}
+
+	int result;
+
+	if (argc < 2) { //no tengo archivo de entrada, uso standard input
+		result = tacFile(stdin);
+		return (result);
+	}
+
+	int i;
+	for (i = 1; i < argc; i++){
+		FILE *fp;
+		fp = fopen(argv[i], "r");
+		if (fp == NULL) {
+			fprintf (stderr, "%s", argv[i]);
+			fprintf (stderr, ": nombre de archivo o comando inválido.\n");
+			return (EXIT_FAILURE);
+		}
+		int result = tacFile(fp);
+		fclose(fp);
+	}
+	return (EXIT_SUCCESS);
+}
+
+\end{lstlisting}
 
 \section{C\'odigo MIPS32}
 El c´odigo MIPS32 generado por el compilador;
 
 \section{Enunciado}
-
 
 \maketitle
 \end{document}
