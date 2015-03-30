@@ -42,10 +42,9 @@ void concatBuffer(char** line, const char* buffer) {
 }
 
 int tacFile(FILE* fp) {
+	const int bufIncrSize = 10;
 	char ** arrayLines = NULL;
-	int lineLenght;
 	int lineCounter = 0;
-	const int bufIncrSize = 11;
 	char buffer[bufIncrSize];
 	char* line = (char *) calloc(bufIncrSize, sizeof(char));
 	while (fgets(buffer, bufIncrSize, fp)) {
@@ -54,9 +53,7 @@ int tacFile(FILE* fp) {
 		if (isEndOfLine(lastCharacterBuffer)) {
 			arrayLines = realloc(arrayLines,
 					(lineCounter + 1) * sizeof(char *));
-			lineLenght = strlen(line);
-			arrayLines[lineCounter] = calloc(sizeof(char), lineLenght + 1);
-			strcpy(arrayLines[lineCounter], line);
+			arrayLines[lineCounter] =  line;
 			lineCounter++;
 			line = (char *) calloc(bufIncrSize, sizeof(char));
 		}
