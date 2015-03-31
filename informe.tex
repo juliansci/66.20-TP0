@@ -89,7 +89,28 @@ $ gcc -o tp0 main.c
 \end{lstlisting}
 
 \section{Corridas de prueba}
-Para corroborar el funcionamiento del programa cont\'abamos con una serie de archivos de prueba y con el diccionario de palabras ubicado en /usr/share/dict/words. Para poder hacer todas las pruebas de manera r\'apida escribimos un script que compilaba el programa, luego lo ejecutaba para los archivos mencionados d\'andolos vuelta dos veces y finalmente verificaba que el archivo resultante fuera igual al original con md5sum. El script es el que sigue a continuaci\'on:
+Para corroborar el funcionamiento del programa cont\'abamos con una serie de archivos de prueba y con el diccionario de palabras ubicado en /usr/share/dict/words. 
+\\
+\\
+\underline{Salidas de ejemplo:}\\
+\textbf{return.txt:}\\
+\emph{of -1 is returned and errno is set to indicate the error.
+Upon successful completion a value of 0 is returned. Otherwise, a value}
+\\\\
+\textbf{basic.txt}\\
+\emph{4. D\\
+3. C\\
+2. B\\
+1. A\\}\\
+\textbf{return.txt basic.txt}\\
+\emph{of -1 is returned and errno is set to indicate the error.\\
+Upon successful completion a value of 0 is returned. Otherwise, a value\\
+4. D\\
+3. C\\
+2. B\\
+1. A}\\
+
+Para poder hacer todas las pruebas de manera r\'apida escribimos un script que compilaba el programa, luego lo ejecutaba para los archivos mencionados d\'andolos vuelta dos veces y finalmente verificaba que el archivo resultante fuera igual al original con md5sum. El script es el siguiente:
 \lstset{language=bash, breaklines=true, basicstyle=\normalsize}
 \begin{lstlisting}
 #!/bin/bash
@@ -134,6 +155,14 @@ done
 
 testWords
 \end{lstlisting}
+\underline{MD5 de los archivos de prueba procesados dos veces:}\\
+\textbf{empty.txt:} d41d8cd98f00b204e9800998ecf8427e\\
+\textbf{basic:} f82584604433de83165f0227f4f06c2c\\
+\textbf{empty-lines.txt:} 0c060d8e86deedcb0f9cd89f6a3f9c93\\
+\textbf{large-file.txt:} 8b2a59a337c384be9b640a38a377eef1\\
+\textbf{return.txt:} 6777acdeb99f2fb0ed9e14fc82899e82\\
+\textbf{status.txt:} 964ccaae773b2f9044dc549ed3636ab6\\
+\textbf{words:} cbbcded3dc3b61ad50c4e36f79c37084
 
 \section{C\'odigo fuente}
 
