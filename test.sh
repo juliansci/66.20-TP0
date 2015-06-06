@@ -32,7 +32,7 @@ testWords() {
 echo Compilando...
 gcc -o tp0 main.c
 
-FILES=(empty basic empty-lines large-file return status)
+FILES=(empty basic empty-lines large-file return status null)
 
 for i in ${FILES[@]}; do
 	testFile ${i}
